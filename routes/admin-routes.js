@@ -23,7 +23,10 @@ adminRouter.post("/api/admin/updateRadiologist", adminController.updateRadiologi
 adminRouter.get("/api/admin/getAppointments", adminController.getAppointments);
 adminRouter.post("/api/admin/deleteAppointment", adminController.deleteAppointment);
 adminRouter.post("/api/admin/updateAppointment", adminController.updateAppointment);
-////Report
-//adminRouter.get("/api/admin/getReports", adminController.getReports);
-//adminRouter.post("/api/admin/deleteReport", adminController.deleteReport);
+//chart
+adminRouter.get("/api/admin/getTotalUsers", adminController.getTotalUsers);
+adminRouter.get("/api/admin/getTotalDoctors", adminController.getTotalDoctors);
+adminRouter.get("/api/admin/getTotalPatients", adminController.getTotalPatients);
+adminRouter.get("/api/admin/getTotalRadiologists", adminController.getTotalRadiologists);
+adminRouter.get("/api/admin/getAppointmentWeekly", adminController.getAppointmentWeekly);
 module.exports = adminRouter;

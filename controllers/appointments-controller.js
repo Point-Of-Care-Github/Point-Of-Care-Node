@@ -25,11 +25,11 @@ const addAppointment = async (req, res, next) => {
     //         new HttpError('Invalid inputs passed, please check your data.', 422)
     //     );
     // }
-    const { doctorId, userId, contact, gender, reason, status, date, name, age, time } = req.body;
+    const { doctorId, userId, contact, gender, reason, status, date, name, time } = req.body;
 
     let existingAppointment;
     try {
-        if (!time || !name || !contact || !gender || !reason || !status || !date || !age) {
+        if (!time || !name || !contact || !gender || !reason || !status || !date ) {
             const error = new HttpError(
                 "Please fill all the fields!",
                 422
@@ -66,8 +66,8 @@ const addAppointment = async (req, res, next) => {
         gender,
         contact,
         date,
-        age,
     });
+    console.log(appointment);
 
     try {
         await appointment.save();
@@ -93,11 +93,10 @@ const updateAppointment = async (req, res) => {
             status,
             date,
             name,
-            age,
             time
         } = req.body;
 
-        if (!time || !name || !contact || !gender || !reason || !status || !date || !age) {
+        if (!time || !name || !contact || !gender || !reason || !status || !date) {
             return res.status(400).json({ msg: "Please fill all the fields!" });
         }
 
@@ -124,7 +123,6 @@ const updateAppointment = async (req, res) => {
         existingAppointment.status = status;
         existingAppointment.date = date;
         existingAppointment.name = name;
-        existingAppointment.age = age;
         existingAppointment.time = time;
         const updatedAppointment = await existingAppointment.save();
 

@@ -5,7 +5,6 @@ const appointmentSchema = mongoose.Schema({
     contact: { type: String, required: true },
     gender: { type: String, required: true },
     reason: { type: String },
-    age: { type: String, required: true },
     name: { type: String, required: true },
     status: { type: String, required: true },
     date: { type: String, required: true },

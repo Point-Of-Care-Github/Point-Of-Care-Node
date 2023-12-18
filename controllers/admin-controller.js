@@ -535,7 +535,93 @@ const deleteAppointment = async (req, res, next) => {
     }
 };
 
+const getTotalUsers = async (req, res, next) => {
+    try{
+        const userCount = await User.countDocuments();
+        res.json({ number: userCount });
+    } catch (error) {
+        console.error('Error fetching users data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
+const getTotalDoctors = async (req, res, next) => {
+    try{
+        const doctorCount = await Doctor.countDocuments();
+        res.json({ number: doctorCount });
+    } catch (error) {
+        console.error('Error fetching doctor data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const getTotalRadiologists = async (req, res, next) => {
+    try{
+        const radiologistCount = await Radiologist.countDocuments();
+        res.json({ number: radiologistCount });
+    } catch (error) {
+        console.error('Error fetching radiologist data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const getTotalPatients = async (req, res, next) => {
+    try{
+        const patientCount = await Patient.countDocuments();
+        res.json({ number: patientCount });
+    } catch (error) {
+        console.error('Error fetching patient data:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+const getAppointmentWeekly = async (req, res) => {
+    try {
+        const currentDate = new Date();
+        // Calculate the start and end of the current week
+        const startOfWeek = new Date(currentDate);
+        startOfWeek.setHours(0, 0, 0, 0 - currentDate.getDay()); // Start of the week is Sunday
+        const endOfWeek = new Date(currentDate);
+        endOfWeek.setHours(23, 59, 59, 999 + (6 - currentDate.getDay())); // End of the week is Saturday
+
+        // Query appointments for the current week
+        const appointments = await Appointment.find({
+        date: { $gte: startOfWeek.toISOString().split('T')[0], $lte: endOfWeek.toISOString().split('T')[0] },
+        });
+
+        // Initialize an object to store the count for each day
+        const appointmentsByDay = {
+        Sun: 0,
+        Mon: 0,
+        Tue: 0,
+        Wed: 0,
+        Thu: 0,
+        Fri: 0,
+        Sat: 0,
+        };
+
+        // Count appointments for each day
+        appointments.forEach((appointment) => {
+        const dayName = getDayName(new Date(appointment.date).getDay());
+        appointmentsByDay[dayName]++;
+        });
+
+        // Convert the result to the desired format
+        const result = Object.keys(appointmentsByDay).map((dayName) => ({
+        name: dayName,
+        appointments: appointmentsByDay[dayName],
+        }));
+
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching appointments:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+function getDayName(dayIndex) {
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[dayIndex];
+};
 
 exports.login = login;
 exports.updateAdmin = updateAdmin;
@@ -554,3 +640,8 @@ exports.deleteRadiologist = deleteRadiologist;
 exports.getAppointments = getAppointments;
 exports.updateAppointment = updateAppointment;
 exports.deleteAppointment = deleteAppointment;
+exports.getTotalUsers = getTotalUsers;
+exports.getTotalDoctors = getTotalDoctors;
+exports.getTotalRadiologists = getTotalRadiologists;
+exports.getTotalPatients = getTotalPatients;
+exports.getAppointmentWeekly = getAppointmentWeekly;

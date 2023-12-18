@@ -188,11 +188,12 @@ const addDoctor = async (req, res, next) => {
     );
   }
 
-  const { userId, contact, gender, experience, time, fees, image, specialization, description } = req.body;
+  const { userId, contact,userName, gender, experience, time, fees, image, specialization, description } = req.body;
 
   const createdDoctor = new Doctor({
     contact,
     gender,
+    userName,
     image,
     specialization,
     description,
@@ -256,10 +257,11 @@ const addPatient = async (req, res, next) => {
     );
   }
 
-  const { userId, age, contact, gender, image } = req.body;
+  const { userId,userName, age, contact, gender, image } = req.body;
 
   const createdPatient = new Patient({
     userId,
+    userName,
     age,
     contact,
     gender,
